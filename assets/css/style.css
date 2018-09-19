@@ -1,0 +1,57 @@
+#container {
+    margin: 20px;
+}
+
+.movieBtn {
+    background-color: #4aaaa5;
+    color: #ffffff;
+    padding: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+#GIF-display-area {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 65%;
+    display: inline-block;
+    text-align: left;
+}
+
+img {
+    margin-right: 15px;
+    margin-bottom: 5px;
+}
+
+.rating {
+    margin-bottom: 15px;
+    display: block;
+}
+
+.imgRating {
+    float: left;
+}
+
+#user-input-area {
+    width: 35%;
+    float: right;
+    position: inherit;
+}
+
+#movie-title-label {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    /* float: right;
+    clear: both; */
+}
+
+input {
+    margin-bottom: 15px;
+    display: block;
+}
+
+#submitBtn {
+    /* float: right;
+    clear: both; */
+    margin-bottom: 5px;
+}
