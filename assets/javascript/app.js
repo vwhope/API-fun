@@ -9,8 +9,8 @@
 // 1. 
 //
 
- // ================================ BEGIN GLOBAL VARIABLE DEFINITIONS =======================================================
- // set GLOBAL variables available to all functions - (generally don't want global- is better to make an encapsulated object)
+// ================================ BEGIN GLOBAL VARIABLE DEFINITIONS =======================================================
+// set GLOBAL variables available to all functions - (generally don't want global- is better to make an encapsulated object)
 
 
 // create an array of items to be used for the button labels
@@ -26,20 +26,87 @@ var topics = ["Snow White", "Pinocchio", "Fantasia", "Dumbo", "Bambi", "Cinderel
 // ================================ END GLOBAL VARIABLE DEFINITIONS =========================================================
 
 // ================================ BEGIN FUNCTION DEFINITIONS  =============================================================
+//
+// this function removes all buttons, then creates a new button for each movie in topics array
 function recreateBtns() {
-
-  // clear out all buttons first
-  $('#button-list-area').empty();
     
-  // create a button, with movie label for every element in the topics array, update DOM
-  for (var i = 0; i < topics.length; i++) {
-      var newBtn = $('<button>');
-      newBtn.addClass('movieBtn');
-      newBtn.attr("data-name", topics[i]);
-      newBtn.text(topics[i]);
-      $('#button-list-area').append(newBtn);
-  }
+    // clear out all buttons first
+    $('#button-list-area').empty();
+    
+    // create a button, with movie label for every element in the topics array, update DOM
+    for (var i = 0; i < topics.length; i++) {
+        var newBtn = $('<button>');
+        newBtn.addClass('movieBtn');
+        newBtn.attr("data-name", topics[i]);
+        newBtn.text(topics[i]);
+        $('#button-list-area').append(newBtn);
+    }
 }
+
+// this function retrieves data using the GIPHY api
+function getData() {
+
+    // clear out all images first
+    $('#GIF-display-area').empty();
+
+    $('button').on('click', function() {
+        var movieName = $(this).attr('data-name');
+
+     // clear out all images first
+     $('#GIF-display-area').empty();
+    
+
+    // test URL that I know works
+    //var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=snow white and the seven dwarfs&limit=10&offset=0&rating=G&lang=en"
+    // URL to build, default response data format is json - but could add "&fmt=json" if wanted to be sure
+    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=" +
+    movieName + "&limit=10&offset=0&lang=en"
+    
+    // use AJAX request GET method to request data using queryURL string
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    })
+    
+    // use "then" to wait until data request is complete before continuing
+    .then(function(response) {
+        // catch the data to be sure you have what you want
+        console.log(queryURL);
+        console.log(response);
+        // store retrieved data in results variable    
+        var results = response.data;
+        
+        // loop through each of result items to get specific data needed
+        for (var i = 0; i < results.length; i++){
+            
+            // create/store div tag to hold both image and movie rating
+            var imgRatingDiv = $('<div>');
+            imgRatingDiv.attr('class', 'imgRating');
+            
+            // create/store image tag for movie 
+            var movieImg = $('<img>');
+            
+            // investigate image options in response data
+            movieImg.attr("src", results[i].images.fixed_height_small_still.url); 
+            
+            // create span tag to include rating retrieved from results
+            var s = $('<span>').text('Movie Rating: ' + results[i].rating);
+            s.attr('class', 'rating');
+            
+            // append the image and span tags to the imgRatingDiv
+            imgRatingDiv.append(movieImg);
+            imgRatingDiv.append(s);
+            
+            // add imgRatingDiv to beginning of "#GIF-display-area)"
+            $('#GIF-display-area').prepend(imgRatingDiv);
+        }
+        
+    });
+
+    });
+    
+} // end getData function
+
 
 // ================================ END FUNCTION DEFINITIONS  ===============================================================
 
@@ -47,10 +114,10 @@ function recreateBtns() {
 // HTML page loads FIRST, then this code runs 
 
 $(document).ready(function() {
-
-recreateBtns();
-
-  
+    
+    recreateBtns();
+    getData();
+    
     
 }); // end document.ready function
 
