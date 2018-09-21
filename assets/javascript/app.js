@@ -15,7 +15,7 @@
 
 // create an array of items to be used for the button labels
 // TOPICS for this example are titles of Disney Movies
-var topics = ["Snow White", "Pinocchio", "Fantasia", "Dumbo", "Bambi", "Cinderella", 
+var topicsArr = ["Snow White", "Pinocchio", "Fantasia", "Dumbo", "Bambi", "Cinderella", 
 "Alice in Wonderland", "Peter Pan", "Lady and the Tramp", "Sleeping Beauty",
 "Pollyanna", "101 Dalmations", "The Parent Trap", "The Sword and the Stone", 
 "Jungle Book", "The Love Bug", "The Aristocats", "Robin Hood", "The Fox and the Hound",
@@ -34,11 +34,11 @@ function recreateBtns() {
     $('#button-list-area').empty();
     
     // create a button, with movie label for every element in the topics array, update DOM
-    for (var i = 0; i < topics.length; i++) {
+    for (var i = 0; i < topicsArr.length; i++) {
         var newBtn = $('<button>');
         newBtn.addClass('movieBtn');
-        newBtn.attr("data-name", topics[i]);
-        newBtn.text(topics[i]);
+        newBtn.attr("data-name", topicsArr[i]);
+        newBtn.text(topicsArr[i]);
         $('#button-list-area').append(newBtn);
     }
 }
@@ -137,11 +137,38 @@ function getData() {
             }); // end FOR loop
                        
         }); // end .then function
-        
+
+         
     }); // end on click movie button
+
     
 } // end getData function
 
+
+function getUserMovie() {
+
+$('#submit-btn').on('click', function(event) {
+event.preventDefault();
+
+var movieName = $("#movie-input").val().trim();
+console.log(movieName);
+// check movie name for duplicates before adding to array
+
+
+// add user movie name to array
+topicsArr.push(movieName);
+
+recreateBtns();
+// reset user input field to blanks
+$('input[name=user-movie-name').val('');
+getData();
+
+});
+
+
+
+
+} // end getUserMovie() function
 
 // ================================ END FUNCTION DEFINITIONS  ===============================================================
 
@@ -152,6 +179,7 @@ $(document).ready(function() {
     
     recreateBtns();
     getData();
+    getUserMovie();
     
     
 }); // end document.ready function

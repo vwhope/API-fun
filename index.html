@@ -44,12 +44,13 @@
                 <span class="rating">Movie Rating:</span>
             </div>
     
-            <div id="user-input-area">
-                    <p id="movie-title-label">Add a Disney Movie Title</p>
-                    <input name="user-movie-name" type="text" required/>
-                    <button id="submitBtn">Submit</button>
+            <form id="createMovieBtn">
+                <div id="user-input-area">
+                        <p id="movie-title-label">Add a Disney Movie Title</p>
+                        <input id="movie-input" name="user-movie-name" type="text" value="" autocomplete="off" required autofocus/>
+                        <button id="submit-btn" type='submit'>Submit</button>
                 </div>    
-            
+            </form>
     </div> <!-- end container -->
     
         
@@ -60,6 +61,8 @@
 
 <!-- include jquery.js file to access jQuery library of functions -->           
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery.js"></script>
 
 <!-- link to my javascript file --> 
 <script src="assets/javascript/app.js"></script>

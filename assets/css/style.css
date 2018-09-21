@@ -2,7 +2,7 @@
     margin: 20px;
 }
 
-.movieBtn {
+.movieBtn, #submit-btn {
     background-color: #4aaaa5;
     color: #ffffff;
     padding: 5px;
@@ -32,7 +32,7 @@ img {
     float: left;
 }
 
-#user-input-area {
+#createMovieBtn {
     width: 35%;
     float: right;
     position: inherit;
@@ -50,8 +50,3 @@ input {
     display: block;
 }
 
-#submitBtn {
-    /* float: right;
-    clear: both; */
-    margin-bottom: 5px;
-}
