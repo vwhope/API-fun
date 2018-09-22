@@ -26,6 +26,8 @@ img {
 .rating {
     margin-bottom: 15px;
     display: block;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .imgRating {
@@ -50,3 +52,6 @@ input {
     display: block;
 }
 
+#status-msg {
+    color: red;
+}

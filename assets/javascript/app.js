@@ -106,7 +106,7 @@ function getData() {
                 console.log(movieImg);
                 
                 // create span tag to include movie rating retrieved from results
-                var movieRating = $('<span>').text('Movie Rating: ' + results[i].rating);
+                var movieRating = $('<span>').text('Rated: ' + results[i].rating.toUpperCase());
                 movieRating.attr('class', 'rating');
                 
                 // append the constructed img and span tags to the imgRatingDiv
@@ -135,39 +135,54 @@ function getData() {
                     $(this).attr("data-state", "still");
                 }
             }); // end FOR loop
-                       
+            
         }); // end .then function
-
-         
+        
+        
     }); // end on click movie button
-
+    
     
 } // end getData function
 
 
 function getUserMovie() {
-
-$('#submit-btn').on('click', function(event) {
-event.preventDefault();
-
-var movieName = $("#movie-input").val().trim();
-console.log(movieName);
-// check movie name for duplicates before adding to array
-
-
-// add user movie name to array
-topicsArr.push(movieName);
-
-recreateBtns();
-// reset user input field to blanks
-$('input[name=user-movie-name').val('');
-getData();
-
-});
-
-
-
-
+    
+    $('#submit-btn').on('click', function(event) {
+        event.preventDefault();
+        
+        var movieName = $("#movie-input").val().trim();
+        console.log(movieName);
+        // no dups yet
+        var dupMovie = false;
+        $('#status-msg').text("");
+        // check movie name for duplicates before adding to array
+        for (var i = 0; i < topicsArr.length; i++) {
+            //found a duplicate
+            if (topicsArr[i].toLowerCase() === movieName.toLowerCase()) {
+                console.log(topicsArr[i].toLowerCase()),
+                console.log(movieName.toLowerCase());
+                $('#status-msg').text("*duplicate entry, try another movie");
+                dupMovie = true;
+                // reset user input field to blanks
+            $('input[name=user-movie-name').val('');
+            } 
+        } // end for loop
+        // no dups found so add movieName to topicsArr
+        if (dupMovie === false) {
+            // add user movie name to array
+            topicsArr.push(movieName);
+            // recreate all buttons based on updated array content
+            recreateBtns();
+            // reset user input field to blanks
+            $('input[name=user-movie-name').val('');
+            // get movie data
+            getData();
+        }
+            
+        
+    }); // end submit-btn
+    
+    
 } // end getUserMovie() function
 
 // ================================ END FUNCTION DEFINITIONS  ===============================================================
