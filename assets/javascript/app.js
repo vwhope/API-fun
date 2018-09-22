@@ -6,7 +6,10 @@
 //    once data is received in the JSON data format, access data needed for project
 //
 // lessons learned with this example
-// 1. 
+// 1. use of the event.preventDefault() method
+// 2. difference between event.stopPropogation() and .preventDefault()
+// 3, pushing new elements into an array dynamically
+// 4. importance of error checking 
 //
 
 // ================================ BEGIN GLOBAL VARIABLE DEFINITIONS =======================================================
@@ -22,7 +25,7 @@ var topicsArr = ["Snow White", "Pinocchio", "Fantasia", "Dumbo", "Bambi", "Cinde
 "The Great Mouse Detective"
 ];
 
-
+var userMovieName = "";
 // ================================ END GLOBAL VARIABLE DEFINITIONS =========================================================
 
 // ================================ BEGIN FUNCTION DEFINITIONS  =============================================================
@@ -46,19 +49,19 @@ function recreateBtns() {
 // this function retrieves data using the GIPHY api
 function getData() {
     
-    // clear out all images first - can delete .empty() from THIS location once all testing is complete
+    // clear out placeholder images first 
     $('#GIF-display-area').empty();
     
     // register on click for movie button
-    $('button').on('click', function() {
+    $('.movieBtn').on('click', function(event) {
+        event.preventDefault();
+        // 
         var movieName = $(this).attr('data-name');
-        
-        
-        
+      
         // clear out all images first
         $('#GIF-display-area').empty();
         
-        
+        console.log("getData:" + movieName);
         // test URL that I know works
         //var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=snow white and the seven dwarfs&limit=10&offset=0&rating=G&lang=en"
         // URL to build, default response data format is json - but could add "&fmt=json" if wanted to be sure
@@ -117,7 +120,7 @@ function getData() {
                 $('#GIF-display-area').prepend(imgRatingDiv);
             }
             
-            // I think this is the correct location to turn on/off the animation for gifs on the page
+            // ?? I think this is the correct location to turn on/off the animation for gifs
             // however, issue is I have to click TWICE on the image the FIRST time to get it to animate??
             // after the first time clicking twice on any image, it toggles correctly with single click
             $(".giphyImg").on("click", function() {
@@ -150,27 +153,29 @@ function getUserMovie() {
     $('#submit-btn').on('click', function(event) {
         event.preventDefault();
         
-        var movieName = $("#movie-input").val().trim();
-        console.log(movieName);
+        userMovieName = $("#movie-input").val().trim();
+        console.log(userMovieName);
         // no dups yet
         var dupMovie = false;
         $('#status-msg').text("");
         // check movie name for duplicates before adding to array
         for (var i = 0; i < topicsArr.length; i++) {
             //found a duplicate
-            if (topicsArr[i].toLowerCase() === movieName.toLowerCase()) {
+            if (topicsArr[i].toLowerCase() === userMovieName.toLowerCase()) {
                 console.log(topicsArr[i].toLowerCase()),
-                console.log(movieName.toLowerCase());
+                console.log(userMovieName.toLowerCase());
                 $('#status-msg').text("*duplicate entry, try another movie");
                 dupMovie = true;
                 // reset user input field to blanks
-            $('input[name=user-movie-name').val('');
+                $('input[name=user-movie-name').val('');
+                  // clear out all images first
+                $('#GIF-display-area').empty();
             } 
         } // end for loop
         // no dups found so add movieName to topicsArr
         if (dupMovie === false) {
             // add user movie name to array
-            topicsArr.push(movieName);
+            topicsArr.push(userMovieName);
             // recreate all buttons based on updated array content
             recreateBtns();
             // reset user input field to blanks
@@ -178,7 +183,7 @@ function getUserMovie() {
             // get movie data
             getData();
         }
-            
+        
         
     }); // end submit-btn
     
