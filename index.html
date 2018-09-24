@@ -27,38 +27,41 @@
         </div>
         
         <div id="GIF-display-area">
-            <div class="imgRating">
+            <!-- <div class="imgRating">
                 <img src="https://picsum.photos/200/150" alt="disney-movie">
                 <span class="rating">Movie Rating:</span>
-            </div> 
-            <div class="imgRating">
+            </div> -->
+            <!-- <div class="imgRating"> 
                 <img src="https://picsum.photos/200/150" alt="disney-movie">
                 <span class="rating">Movie Rating:</span>
-            </div>
-            <div class="imgRating">
+            </div> -->
+            <!-- <div class="imgRating">
                 <img src="https://picsum.photos/200/150" alt="disney-movie">
                 <span class="rating">Movie Rating:</span>
-            </div>
-            <div class="imgRating"></div>
+            </div> -->
+            <!-- <div class="imgRating"></div>
                 <img src="https://picsum.photos/200/150" alt="disney-movie">
                 <span class="rating">Rated: </span>
-            </div> 
-            
+            </div> -->
+            </div>
             <form id="createMovieBtn">
                 <div id="user-input-area">
                         <p id="movie-title-label">Add a Disney Movie Title</p>
                         <input id="movie-input" name="user-movie-name" type="text" value="" autocomplete="off" required autofocus/>
                         <button id="submit-btn" type='submit'>Submit</button>
                         <p id="status-msg"></p>
-                </div>    
+                </div>   
+                <!-- this is a new area for the OMDb API data - additional info about the movie -->
+                <div id="more-movie-info">
+                    <p id="year-released-title">Year Released</p>
+                    <p id="year-released" class="movie-data">1950</p>
+                    <p id="short-plot-title">Plot</p>
+                    <p id="short-plot" class="movie-data">This is the short plot for the movie button clicked</p>
+                    <p id="movie-awards-title">Awards</p>
+                    <p id="movie-awards" class="movie-data">Oscar-nominated</p>
+                </div>
             </form>
     </div> <!-- end container -->
-    
-        
-    
-    
-
-
 
 <!-- include jquery.js file to access jQuery library of functions -->           
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>

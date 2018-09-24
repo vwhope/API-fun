@@ -3,13 +3,13 @@
 // The purpose of this code is to:
 //    gain experience using an API, in this case the GIPHY API
 //    use AJAX GET() method to request data using the API
-//    once data is received in the JSON data format, access data needed for project
+//    once data is received in the JSON data format, access response data needed for project
 //
 // lessons learned with this example
 // 1. use of the event.preventDefault() method
 // 2. difference between event.stopPropogation() and .preventDefault()
 // 3, pushing new elements into an array dynamically
-// 4. importance of error checking 
+// 4. importance and implementation of of error checking 
 //
 
 // ================================ BEGIN GLOBAL VARIABLE DEFINITIONS =======================================================
@@ -52,21 +52,28 @@ function getData() {
     // clear out placeholder images first 
     $('#GIF-display-area').empty();
     
+    // clear out placeholder text in more-movie-info text areas
+    $('.movie-data').empty();
+    
     // register on click for movie button
     $('.movieBtn').on('click', function(event) {
         event.preventDefault();
         // 
         var movieName = $(this).attr('data-name');
-      
+        
+        // be sure to retrieve something Disney related
+        movieName = movieName + "+Disney";
+        
         // clear out all images first
         $('#GIF-display-area').empty();
         
         console.log("getData:" + movieName);
+        
         // test URL that I know works
         //var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=snow white and the seven dwarfs&limit=10&offset=0&rating=G&lang=en"
         // URL to build, default response data format is json - but could add "&fmt=json" if wanted to be sure
         var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=" +
-        movieName + "&limit=10&offset=0&lang=en"
+        movieName + "&limit=10&offset=0&lang=en";
         
         // use AJAX request GET method to request data using queryURL string
         $.ajax({
@@ -79,6 +86,8 @@ function getData() {
             // catch the data to be sure you have what you want
             console.log(queryURL);
             console.log(response);
+            
+            
             // store retrieved data in results variable    
             var results = response.data;
             
@@ -139,10 +148,63 @@ function getData() {
                 }
             }); // end FOR loop
             
-        }); // end .then function
+            // BEGIN OMDb API request
+            // clear out any previous extra movie data
+            $('.movie-data').empty();
+            
+            // here we have to remove the "+Disney" string from movieName before we can search movie database using the OMDb api
+            var extractMovie = movieName.replace("+Disney", "" );
+            movieName = extractMovie;
+            
+            // console.log("getExtra:" + movieName);
+            // console.log("getExtra:" + extractMovie);
+            
+            
+            // dft plot is "short", dft data type is "JSON" so don't need to specify "&fmt=json" in URL string
+            
+            var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=bfadd55b";
+            
+            // use AJAX request GET method to request data using queryURL string
+            $.ajax({
+                url: queryURL2,
+                method: "GET"
+            })
+            
+            // use "then" to wait until data request is complete before continuing
+            .then(function(response) {
+                // catch the data to be sure you have what you want
+                console.log(queryURL2);
+                console.log(response);
+                
+                // if I wanted to save this information to local storage I could do that here - but I don't need to 
+                // localStorage.setItem("saveJSON", myJSON);
+                
+                // console.log("year: " + response.Year);
+                
+                // update html with the data from OMDb api JSON object
+                
+                $('#year-released').text(response.Year);
+                $('#short-plot').text(response.Plot);
+                $('#movie-awards').text(response.Awards);  
+                
+            });
+            // want to put in catch for errors but couldn't get it to work ???
+            //.catch(function(error) {
+            //    console.log('ERROR', error);
+            //});
+            
+            // END OMDb api section to get extra movie data
+            
+            
+        }); //  end .then function
         
+        // want to put .catch here after the .then method - but couldn't get it to work ???
+        // .catch(function (error) {
+        //     console.log('ERROR', error);
+        // });
         
-    }); // end on click movie button
+    }); // END on-click movie button
+    
     
     
 } // end getData function
@@ -162,14 +224,16 @@ function getUserMovie() {
         for (var i = 0; i < topicsArr.length; i++) {
             //found a duplicate
             if (topicsArr[i].toLowerCase() === userMovieName.toLowerCase()) {
-                console.log(topicsArr[i].toLowerCase()),
+                console.log(topicsArr[i].toLowerCase());
                 console.log(userMovieName.toLowerCase());
                 $('#status-msg').text("*duplicate entry, try another movie");
                 dupMovie = true;
                 // reset user input field to blanks
                 $('input[name=user-movie-name').val('');
-                  // clear out all images first
+                // clear out all images first
                 $('#GIF-display-area').empty();
+                $('.movie-data').empty();
+                
             } 
         } // end for loop
         // no dups found so add movieName to topicsArr
@@ -189,6 +253,49 @@ function getUserMovie() {
     
     
 } // end getUserMovie() function
+
+
+
+// GET data using OMDb API for extra movie information (year, short plot, awards)
+function getExtra() {
+    // clear out any previous extra movie data
+    $('.movie-data').empty();
+    // temporarily force a movie title - need to fix movieName
+    var movieName = "Bambi";
+    console.log("getExtra:" + movieName);
+    
+    // test URL that I know works
+    // dft plot is "short", dft type is "JSON" so don't need to specify in URL string
+    //var queryURL2 = "http://www.omdbapi.com/?apikey=bfadd55b&t=bambi"
+    // URL to build, default response data format is json - but could add "&fmt=json" if wanted to be sure
+    
+    var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=bfadd55b";
+    
+    // use AJAX request GET method to request data using queryURL string
+    $.ajax({
+        url: queryURL2,
+        method: "GET"
+    })
+    
+    // use "then" to wait until data request is complete before continuing
+    .then(function(response2) {
+        // catch the data to be sure you have what you want
+        console.log(queryURL2);
+        console.log(response2);
+        
+        
+        // store retrieved data in results variable    
+        var results2 = response2.data;
+        
+        // // loop through results, get data needed (still and active img URL and movie rating)
+        // for (var i = 0; i < results2.length; i++){
+        
+        $('#year-released').text(results2.Year);
+        $('#short-plot').text(results2.Plot);
+        $('#movie-awards').text(results2.Awards);    
+    });
+    
+} // end getExtra function
 
 // ================================ END FUNCTION DEFINITIONS  ===============================================================
 
