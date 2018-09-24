@@ -18,14 +18,14 @@
 
 // create an array of items to be used for the button labels
 // TOPICS for this example are titles of Disney Movies
-var topicsArr = ["Snow White", "Pinocchio", "Fantasia", "Dumbo", "Bambi", "Cinderella", 
-"Alice in Wonderland", "Peter Pan", "Lady and the Tramp", "Sleeping Beauty",
-"Pollyanna", "101 Dalmations", "The Parent Trap", "The Sword and the Stone", 
-"Jungle Book", "The Love Bug", "The Aristocats", "Robin Hood", "The Fox and the Hound",
-"The Great Mouse Detective"
+var topicsArr = ['Snow White', 'Pinocchio', 'Fantasia', 'Dumbo', 'Bambi', 'Cinderella', 
+'Alice in Wonderland', 'Peter Pan', 'Lady and the Tramp', 'Sleeping Beauty',
+'Pollyanna', '101 Dalmations', 'The Parent Trap', 'The Sword and the Stone', 
+'Jungle Book', 'The Love Bug', 'The Aristocats', 'Robin Hood', 'The Fox and the Hound',
+'The Great Mouse Detective'
 ];
 
-var userMovieName = "";
+var userMovieName = '';
 // ================================ END GLOBAL VARIABLE DEFINITIONS =========================================================
 
 // ================================ BEGIN FUNCTION DEFINITIONS  =============================================================
@@ -40,7 +40,7 @@ function recreateBtns() {
     for (var i = 0; i < topicsArr.length; i++) {
         var newBtn = $('<button>');
         newBtn.addClass('movieBtn');
-        newBtn.attr("data-name", topicsArr[i]);
+        newBtn.attr('data-name', topicsArr[i]);
         newBtn.text(topicsArr[i]);
         $('#button-list-area').append(newBtn);
     }
@@ -62,26 +62,26 @@ function getData() {
         var movieName = $(this).attr('data-name');
         
         // be sure to retrieve something Disney related
-        movieName = movieName + "+Disney";
+        movieName = movieName + '+Disney';
         
         // clear out all images first
         $('#GIF-display-area').empty();
         
-        console.log("getData:" + movieName);
+        console.log('getData:' + movieName);
         
         // test URL that I know works
-        //var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=snow white and the seven dwarfs&limit=10&offset=0&rating=G&lang=en"
-        // URL to build, default response data format is json - but could add "&fmt=json" if wanted to be sure
-        var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=" +
-        movieName + "&limit=10&offset=0&lang=en";
+        //var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=snow white and the seven dwarfs&limit=10&offset=0&rating=G&lang=en'
+        // URL to build, default response data format is json - but could add '&fmt=json' if wanted to be sure
+        var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=' +
+        movieName + '&limit=10&offset=0&lang=en';
         
         // use AJAX request GET method to request data using queryURL string
         $.ajax({
             url: queryURL,
-            method: "GET"
+            method: 'GET'
         })
         
-        // use "then" to wait until data request is complete before continuing
+        // use 'then' to wait until data request is complete before continuing
         .then(function(response) {
             // catch the data to be sure you have what you want
             console.log(queryURL);
@@ -112,7 +112,7 @@ function getData() {
                 movieImg.attr('src', stillImgUrl);
                 movieImg.attr('data-active', activeImgUrl);
                 movieImg.attr('data-still', stillImgUrl);
-                movieImg.attr('class', "giphyImg");
+                movieImg.attr('class', 'giphyImg');
                 
                 // can remove after testing
                 console.log(movieImg);
@@ -125,26 +125,26 @@ function getData() {
                 imgRatingDiv.append(movieImg);
                 imgRatingDiv.append(movieRating);
                 
-                // add imgRatingDiv to beginning of "#GIF-display-area)"
+                // add imgRatingDiv to beginning of '#GIF-display-area)'
                 $('#GIF-display-area').prepend(imgRatingDiv);
             }
             
             // ?? I think this is the correct location to turn on/off the animation for gifs
             // however, issue is I have to click TWICE on the image the FIRST time to get it to animate??
             // after the first time clicking twice on any image, it toggles correctly with single click
-            $(".giphyImg").on("click", function() {
+            $('.giphyImg').on('click', function() {
                 // jQuery attr() method can GET or SET the value of any HTML elemnent 
-                var state = $(this).attr("data-state");
+                var state = $(this).attr('data-state');
                 
                 // If the clicked image's state is still, update its src attribute to its data-active value
                 // Then, set the image's data-state to active
                 // Else set src to the data-still value
-                if (state === "still") {
-                    $(this).attr("src", $(this).attr("data-active"));
-                    $(this).attr("data-state", "active");
+                if (state === 'still') {
+                    $(this).attr('src', $(this).attr('data-active'));
+                    $(this).attr('data-state', 'active');
                 } else {
-                    $(this).attr("src", $(this).attr("data-still"));
-                    $(this).attr("data-state", "still");
+                    $(this).attr('src', $(this).attr('data-still'));
+                    $(this).attr('data-state', 'still');
                 }
             }); // end FOR loop
             
@@ -152,34 +152,34 @@ function getData() {
             // clear out any previous extra movie data
             $('.movie-data').empty();
             
-            // here we have to remove the "+Disney" string from movieName before we can search movie database using the OMDb api
-            var extractMovie = movieName.replace("+Disney", "" );
+            // here we have to remove the '+Disney' string from movieName before we can search movie database using the OMDb api
+            var extractMovie = movieName.replace('+Disney', '' );
             movieName = extractMovie;
             
-            // console.log("getExtra:" + movieName);
-            // console.log("getExtra:" + extractMovie);
+            // console.log('getExtra:' + movieName);
+            // console.log('getExtra:' + extractMovie);
             
             
-            // dft plot is "short", dft data type is "JSON" so don't need to specify "&fmt=json" in URL string
+            // dft plot is 'short', dft data type is 'JSON' so don't need to specify '&fmt=json' in URL string
             
-            var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=bfadd55b";
+            var queryURL2 = 'https://www.omdbapi.com/?t=' + movieName + '&y=&plot=short&apikey=bfadd55b';
             
             // use AJAX request GET method to request data using queryURL string
             $.ajax({
                 url: queryURL2,
-                method: "GET"
+                method: 'GET'
             })
             
-            // use "then" to wait until data request is complete before continuing
+            // use 'then' to wait until data request is complete before continuing
             .then(function(response) {
                 // catch the data to be sure you have what you want
                 console.log(queryURL2);
                 console.log(response);
                 
                 // if I wanted to save this information to local storage I could do that here - but I don't need to 
-                // localStorage.setItem("saveJSON", myJSON);
+                // localStorage.setItem('saveJSON', myJSON);
                 
-                // console.log("year: " + response.Year);
+                // console.log('year: ' + response.Year);
                 
                 // update html with the data from OMDb api JSON object
                 
@@ -215,18 +215,18 @@ function getUserMovie() {
     $('#submit-btn').on('click', function(event) {
         event.preventDefault();
         
-        userMovieName = $("#movie-input").val().trim();
+        userMovieName = $('#movie-input').val().trim();
         console.log(userMovieName);
         // no dups yet
         var dupMovie = false;
-        $('#status-msg').text("");
+        $('#status-msg').text('');
         // check movie name for duplicates before adding to array
         for (var i = 0; i < topicsArr.length; i++) {
             //found a duplicate
             if (topicsArr[i].toLowerCase() === userMovieName.toLowerCase()) {
                 console.log(topicsArr[i].toLowerCase());
                 console.log(userMovieName.toLowerCase());
-                $('#status-msg').text("*duplicate entry, try another movie");
+                $('#status-msg').text('*duplicate entry, try another movie');
                 dupMovie = true;
                 // reset user input field to blanks
                 $('input[name=user-movie-name').val('');
@@ -261,23 +261,23 @@ function getExtra() {
     // clear out any previous extra movie data
     $('.movie-data').empty();
     // temporarily force a movie title - need to fix movieName
-    var movieName = "Bambi";
-    console.log("getExtra:" + movieName);
+    var movieName = 'Bambi';
+    console.log('getExtra:' + movieName);
     
     // test URL that I know works
-    // dft plot is "short", dft type is "JSON" so don't need to specify in URL string
-    //var queryURL2 = "http://www.omdbapi.com/?apikey=bfadd55b&t=bambi"
-    // URL to build, default response data format is json - but could add "&fmt=json" if wanted to be sure
+    // dft plot is 'short', dft type is 'JSON' so don't need to specify in URL string
+    //var queryURL2 = 'http://www.omdbapi.com/?apikey=bfadd55b&t=bambi'
+    // URL to build, default response data format is json - but could add '&fmt=json' if wanted to be sure
     
-    var queryURL2 = "https://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=bfadd55b";
+    var queryURL2 = 'https://www.omdbapi.com/?t=' + movieName + '&y=&plot=short&apikey=bfadd55b';
     
     // use AJAX request GET method to request data using queryURL string
     $.ajax({
         url: queryURL2,
-        method: "GET"
+        method: 'GET'
     })
     
-    // use "then" to wait until data request is complete before continuing
+    // use 'then' to wait until data request is complete before continuing
     .then(function(response2) {
         // catch the data to be sure you have what you want
         console.log(queryURL2);

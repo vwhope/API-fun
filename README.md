@@ -18,7 +18,7 @@
 **Goals of program:**
 * to create buttons based on data in an array
 * to create buttons based on user input
-* to retrieve data using AJAX and the GIPPHY and OMBDb apis
+* to retrieve data using AJAX and the GIPHY and OMDb APIs
 * switch between static and animated versions of the gif based on user click
 
 **To play game:**
@@ -39,4 +39,4 @@
 
 **Resource Contributors:**
 * Both static and animated gifs from [GIPHY](https://giphy.com/)
-* Additional movie data (Year, short plot, awards) from [OMDb](http://www.omdbapi.com)
+* Additional movie data (year-released, short plot, awards) from [OMDb](http://www.omdbapi.com)
