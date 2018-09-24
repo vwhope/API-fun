@@ -132,28 +132,28 @@ input {
 @media only screen and (max-width: 640px) {
     /* For small screen devices */
     #container {
-        width:  100%;
+        width:  95%;
     }
          
     #GIF-display-area {
         /* background-color: white; */
-        width: 100%;
+        width: 95%;
     }
     
     #createMovieBtn {
         /* background-color: orange; */
-        width: 100%;
+        width: 95%;
     }
     
     
     #user-input-area {
         /* background-color: lightblue; */
-        width: 100%;
+        width: 95%;
     }
     
     #more-movie-info {
         /* background-color: pink; */
-        width: 100%;
+        width: 95%;
     } 
     
 }
