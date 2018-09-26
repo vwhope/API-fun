@@ -43,8 +43,6 @@ img {
 #movie-title-label {
     margin-top: 20px;
     margin-bottom: 15px;
-    /* float: right;
-    clear: both; */
 }
 
 input {
@@ -97,34 +95,15 @@ input {
 @media only screen and (max-width: 980px) {
     /* For large screen devices */
     #container {
-        width: 100%;
+        width: 85%;
         /* background-color: yellow; */
     }
-/* 
-    #GIF-display-area {
-        background-color: white;
-    }
-    
-    #createMovieBtn {
-        background-color: orange;
-    }
-    
-    
-    #user-input-area {
-        background-color: lightblue;
-        width: 100%;
-    }
-    
-    #more-movie-info {
-        background-color: pink;
-        width: 100%;
-    } */
 }
 
 @media only screen and (max-width: 768px) {
     /* For medium screen devices */
     #container {
-        width: 100%;
+        width: 85%;
     }
     
 }
@@ -132,9 +111,9 @@ input {
 @media only screen and (max-width: 640px) {
     /* For small screen devices */
     #container {
-        width:  95%;
+        width:  85%;
     }
-         
+    
     #GIF-display-area {
         /* background-color: white; */
         width: 95%;

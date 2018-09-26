@@ -46,8 +46,9 @@ function recreateBtns() {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // this function retrieves data using the GIPHY api
-function getData() {
+function getData(movieName) {
     
     // clear out placeholder images first 
     $('#GIF-display-area').empty();
@@ -56,201 +57,194 @@ function getData() {
     $('.movie-data').empty();
     
     // register on click for movie button
-    $('.movieBtn').on('click', function(event) {
-        event.preventDefault();
-        // 
-        var movieName = $(this).attr('data-name');
+    //  $('.movieBtn').on('click', function(event) {
+    //      event.preventDefault();
+    // 
+    //     var movieName = $(this).attr('data-name');
+    
+    // be sure to retrieve something Disney related
+    //    movieName = movieName + '+Disney';
+    
+    // clear out all images first
+    $('#GIF-display-area').empty();
+    
+    console.log('getData:' + movieName);
+    
+    // test URL that I know works
+    //var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=snow white and the seven dwarfs&limit=10&offset=0&rating=G&lang=en'
+    // URL to build, default response data format is json - but could add '&fmt=json' if wanted to be sure
+    var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=' +
+    movieName + '&limit=10&offset=0&lang=en';
+    
+    // use AJAX request GET method to request data using queryURL string
+    $.ajax({
+        url: queryURL,
+        method: 'GET'
+    })
+    
+    // use 'then' to wait until data request is complete before continuing
+    .then(function(response) {
+        // catch the data to be sure you have what you want
+        console.log(queryURL);
+        console.log(response);
         
-        // be sure to retrieve something Disney related
-        movieName = movieName + '+Disney';
         
-        // clear out all images first
-        $('#GIF-display-area').empty();
+        // store retrieved data in results variable    
+        var results = response.data;
         
-        console.log('getData:' + movieName);
+        // loop through results, get data needed (still and active img URL and movie rating)
+        for (var i = 0; i < results.length; i++){
+            
+            // create/store div tag to hold both image and movie rating
+            // FYI: jQuery creates both the beg and end tag element with the one variable
+            // this puts both the image and the rating within the same div tag 
+            var imgRatingDiv = $('<div>');
+            imgRatingDiv.attr('class', 'imgRating');
+            
+            // create/store image tag for movie 
+            var movieImg = $('<img>');
+            
+            // store two versions of the GIF (still, active) 
+            var stillImgUrl = results[i].images.fixed_height_small_still.url;
+            var activeImgUrl = results[i].images.fixed_height_small.url;
+            
+            // 1. set attributes related to the img source url so can toggle images
+            // 2. give the giphy images a class so can work with all giphy images only
+            movieImg.attr('src', stillImgUrl);
+            movieImg.attr('data-active', activeImgUrl);
+            movieImg.attr('data-still', stillImgUrl);
+            movieImg.attr('class', 'giphyImg');
+            
+            // can remove after testing
+            console.log(movieImg);
+            
+            // create span tag to include movie rating retrieved from results
+            var movieRating = $('<span>').text('Rated: ' + results[i].rating.toUpperCase());
+            movieRating.attr('class', 'rating');
+            
+            // append the constructed img and span tags to the imgRatingDiv
+            imgRatingDiv.append(movieImg);
+            imgRatingDiv.append(movieRating);
+            
+            // add imgRatingDiv to beginning of '#GIF-display-area)'
+            $('#GIF-display-area').prepend(imgRatingDiv);
+        }
         
-        // test URL that I know works
-        //var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=snow white and the seven dwarfs&limit=10&offset=0&rating=G&lang=en'
-        // URL to build, default response data format is json - but could add '&fmt=json' if wanted to be sure
-        var queryURL = 'https://api.giphy.com/v1/gifs/search?api_key=XU8hZWx5CLjtTMlTpZK8tmdwpevFJj18&q=' +
-        movieName + '&limit=10&offset=0&lang=en';
+        // ?? I think this is the correct location to turn on/off the animation for gifs
+        // however, issue is I have to click TWICE on the image the FIRST time to get it to animate??
+        // after the first time clicking twice on any image, it toggles correctly with single click
+        $('.giphyImg').on('click', function() {
+            // jQuery attr() method can GET or SET the value of any HTML elemnent 
+            var state = $(this).attr('data-state');
+            
+            // If the clicked image's state is still, update its src attribute to its data-active value
+            // Then, set the image's data-state to active
+            // Else set src to the data-still value
+            if (state === 'still') {
+                $(this).attr('src', $(this).attr('data-active'));
+                $(this).attr('data-state', 'active');
+            } else {
+                $(this).attr('src', $(this).attr('data-still'));
+                $(this).attr('data-state', 'still');
+            }
+        }); // end FOR loop
+        
+        // BEGIN OMDb API request
+        // clear out any previous extra movie data
+        $('.movie-data').empty();
+        
+        // here we have to remove the '+Disney' string from movieName before we can search movie database using the OMDb api
+        var extractMovie = movieName.replace('+Disney', '' );
+        movieName = extractMovie;
+        
+        // dft plot is 'short', dft data type is 'JSON' so don't need to specify '&fmt=json' in URL string
+        
+        var queryURL2 = 'https://www.omdbapi.com/?t=' + movieName + '&y=&plot=short&apikey=bfadd55b';
         
         // use AJAX request GET method to request data using queryURL string
         $.ajax({
-            url: queryURL,
+            url: queryURL2,
             method: 'GET'
         })
         
         // use 'then' to wait until data request is complete before continuing
         .then(function(response) {
             // catch the data to be sure you have what you want
-            console.log(queryURL);
+            console.log(queryURL2);
             console.log(response);
             
+            // if I wanted to save this information to local storage I could do that here - but I don't need to 
+            // localStorage.setItem('saveJSON', myJSON);
             
-            // store retrieved data in results variable    
-            var results = response.data;
+            // console.log('year: ' + response.Year);
             
-            // loop through results, get data needed (still and active img URL and movie rating)
-            for (var i = 0; i < results.length; i++){
-                
-                // create/store div tag to hold both image and movie rating
-                // FYI: jQuery creates both the beg and end tag element with the one variable
-                // this puts both the image and the rating within the same div tag 
-                var imgRatingDiv = $('<div>');
-                imgRatingDiv.attr('class', 'imgRating');
-                
-                // create/store image tag for movie 
-                var movieImg = $('<img>');
-                
-                // store two versions of the GIF (still, active) 
-                var stillImgUrl = results[i].images.fixed_height_small_still.url;
-                var activeImgUrl = results[i].images.fixed_height_small.url;
-                
-                // 1. set attributes related to the img source url so can toggle images
-                // 2. give the giphy images a class so can work with all giphy images only
-                movieImg.attr('src', stillImgUrl);
-                movieImg.attr('data-active', activeImgUrl);
-                movieImg.attr('data-still', stillImgUrl);
-                movieImg.attr('class', 'giphyImg');
-                
-                // can remove after testing
-                console.log(movieImg);
-                
-                // create span tag to include movie rating retrieved from results
-                var movieRating = $('<span>').text('Rated: ' + results[i].rating.toUpperCase());
-                movieRating.attr('class', 'rating');
-                
-                // append the constructed img and span tags to the imgRatingDiv
-                imgRatingDiv.append(movieImg);
-                imgRatingDiv.append(movieRating);
-                
-                // add imgRatingDiv to beginning of '#GIF-display-area)'
-                $('#GIF-display-area').prepend(imgRatingDiv);
-            }
+            // update html with the data from OMDb api JSON object
             
-            // ?? I think this is the correct location to turn on/off the animation for gifs
-            // however, issue is I have to click TWICE on the image the FIRST time to get it to animate??
-            // after the first time clicking twice on any image, it toggles correctly with single click
-            $('.giphyImg').on('click', function() {
-                // jQuery attr() method can GET or SET the value of any HTML elemnent 
-                var state = $(this).attr('data-state');
-                
-                // If the clicked image's state is still, update its src attribute to its data-active value
-                // Then, set the image's data-state to active
-                // Else set src to the data-still value
-                if (state === 'still') {
-                    $(this).attr('src', $(this).attr('data-active'));
-                    $(this).attr('data-state', 'active');
-                } else {
-                    $(this).attr('src', $(this).attr('data-still'));
-                    $(this).attr('data-state', 'still');
-                }
-            }); // end FOR loop
+            $('#year-released').text(response.Year);
+            $('#short-plot').text(response.Plot);
+            $('#movie-awards').text(response.Awards);  
             
-            // BEGIN OMDb API request
-            // clear out any previous extra movie data
-            $('.movie-data').empty();
-            
-            // here we have to remove the '+Disney' string from movieName before we can search movie database using the OMDb api
-            var extractMovie = movieName.replace('+Disney', '' );
-            movieName = extractMovie;
-            
-            // console.log('getExtra:' + movieName);
-            // console.log('getExtra:' + extractMovie);
-            
-            
-            // dft plot is 'short', dft data type is 'JSON' so don't need to specify '&fmt=json' in URL string
-            
-            var queryURL2 = 'https://www.omdbapi.com/?t=' + movieName + '&y=&plot=short&apikey=bfadd55b';
-            
-            // use AJAX request GET method to request data using queryURL string
-            $.ajax({
-                url: queryURL2,
-                method: 'GET'
-            })
-            
-            // use 'then' to wait until data request is complete before continuing
-            .then(function(response) {
-                // catch the data to be sure you have what you want
-                console.log(queryURL2);
-                console.log(response);
-                
-                // if I wanted to save this information to local storage I could do that here - but I don't need to 
-                // localStorage.setItem('saveJSON', myJSON);
-                
-                // console.log('year: ' + response.Year);
-                
-                // update html with the data from OMDb api JSON object
-                
-                $('#year-released').text(response.Year);
-                $('#short-plot').text(response.Plot);
-                $('#movie-awards').text(response.Awards);  
-                
-            });
-            // want to put in catch for errors but couldn't get it to work ???
-            //.catch(function(error) {
-            //    console.log('ERROR', error);
-            //});
-            
-            // END OMDb api section to get extra movie data
-            
-            
-        }); //  end .then function
+        }) // end .then function for OMDb api
         
-        // want to put .catch here after the .then method - but couldn't get it to work ???
-        // .catch(function (error) {
-        //     console.log('ERROR', error);
-        // });
+        // catch errors after OMBDb api ajax call
+        .fail(function (error) {
+            console.log('ERROR', error);
+        }); // end .catch  
         
-    }); // END on-click movie button
+    })  // end .then function for GIPHY api ajax call
     
+    // catch errors after GIPHY api ajax call
+    .fail(function (error) {
+        console.log('ERROR', error);
+    }); // end .catch      
     
+    // END OMDb api section to get extra movie data
+    // })  //end on-click   
     
 } // end getData function
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getUserMovie() {
+function getUserMovie(userMovieName) {
     
-    $('#submit-btn').on('click', function(event) {
-        event.preventDefault();
-        
-        userMovieName = $('#movie-input').val().trim();
-        console.log(userMovieName);
-        // no dups yet
-        var dupMovie = false;
-        $('#status-msg').text('');
-        // check movie name for duplicates before adding to array
-        for (var i = 0; i < topicsArr.length; i++) {
-            //found a duplicate
-            if (topicsArr[i].toLowerCase() === userMovieName.toLowerCase()) {
-                console.log(topicsArr[i].toLowerCase());
-                console.log(userMovieName.toLowerCase());
-                $('#status-msg').text('*duplicate entry, try another movie');
-                dupMovie = true;
-                // reset user input field to blanks
-                $('input[name=user-movie-name').val('');
-                // clear out all images first
-                $('#GIF-display-area').empty();
-                $('.movie-data').empty();
-                
-            } 
-        } // end for loop
-        // no dups found so add movieName to topicsArr
-        if (dupMovie === false) {
-            // add user movie name to array
-            topicsArr.push(userMovieName);
-            // recreate all buttons based on updated array content
-            recreateBtns();
+    //    $('#submit-btn').on('click', function(event) {
+    //        event.preventDefault();
+    
+    //        userMovieName = $('#movie-input').val().trim();
+    //        console.log(userMovieName);
+    
+    // no duplicate values yet
+    var dupMovie = false;
+    $('#status-msg').text('');
+    // check movie name for duplicates before adding to array
+    for (var i = 0; i < topicsArr.length; i++) {
+        //found a duplicate
+        if (topicsArr[i].toLowerCase() === userMovieName.toLowerCase()) {
+            console.log(topicsArr[i].toLowerCase());
+            console.log(userMovieName.toLowerCase());
+            $('#status-msg').text('*duplicate entry, try another movie');
+            dupMovie = true;
             // reset user input field to blanks
             $('input[name=user-movie-name').val('');
-            // get movie data
-            getData();
-        }
-        
-        
-    }); // end submit-btn
+            // clear out all images first
+            $('#GIF-display-area').empty();
+            $('.movie-data').empty();
+            
+        } 
+    } // end for loop
+    // no dups found so add movieName to topicsArr
+    if (dupMovie === false) {
+        // add user movie name to array
+        topicsArr.push(userMovieName);
+        // recreate all buttons based on updated array content
+        recreateBtns();
+        // reset user input field to blanks
+        $('input[name=user-movie-name').val('');
+        // get movie data
+        getData(userMovieName);
+    }
     
+    //   }); // end submit-btn
     
 } // end getUserMovie() function
 
@@ -293,7 +287,12 @@ function getExtra() {
         $('#year-released').text(results2.Year);
         $('#short-plot').text(results2.Plot);
         $('#movie-awards').text(results2.Awards);    
-    });
+    })  //  end .then function
+    
+    // catch errors on AJAX call using the OMDb api 
+    .fail(function (error) {
+        console.log('ERROR', error);
+    })
     
 } // end getExtra function
 
@@ -305,8 +304,25 @@ function getExtra() {
 $(document).ready(function() {
     
     recreateBtns();
-    getData();
-    getUserMovie();
+    
+    // register on click for movie button
+    $('.movieBtn').on('click', function(event) {
+        event.preventDefault();
+        // 
+        var movieName = $(this).attr('data-name');
+        
+        // be sure to retrieve something Disney related
+        movieName = movieName + '+Disney';
+        getData(movieName);
+    });
+    
+    $('#submit-btn').on('click', function(event) {
+        event.preventDefault();
+        
+        userMovieName = $('#movie-input').val().trim();
+        console.log(userMovieName);
+        getUserMovie(userMovieName);
+    });
     
     
 }); // end document.ready function
