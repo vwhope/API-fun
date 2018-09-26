@@ -35,6 +35,7 @@ function recreateBtns() {
     
     // clear out all buttons first
     $('#button-list-area').empty();
+    $('.movie-data').empty();
     
     // create a button, with movie label for every element in the topics array, update DOM
     for (var i = 0; i < topicsArr.length; i++) {
@@ -317,11 +318,11 @@ $(document).ready(function() {
     });
     
     $('#submit-btn').on('click', function(event) {
-        event.preventDefault();
+       // event.preventDefault();
         
         userMovieName = $('#movie-input').val().trim();
         console.log(userMovieName);
-        getUserMovie(userMovieName);
+       getUserMovie(userMovieName);
     });
     
     
