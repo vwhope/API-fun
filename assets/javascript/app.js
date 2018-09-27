@@ -20,12 +20,13 @@
 // TOPICS for this example are titles of Disney Movies
 var topicsArr = ['Snow White', 'Pinocchio', 'Fantasia', 'Dumbo', 'Bambi', 'Cinderella', 
 'Alice in Wonderland', 'Peter Pan', 'Lady and the Tramp', 'Sleeping Beauty',
-'Pollyanna', '101 Dalmations', 'The Parent Trap', 'The Sword and the Stone', 
+'Pollyanna', 'The Parent Trap',  
 'Jungle Book', 'The Love Bug', 'The Aristocats', 'Robin Hood', 'The Fox and the Hound',
 'The Great Mouse Detective'
 ];
 
 var userMovieName = '';
+
 // ================================ END GLOBAL VARIABLE DEFINITIONS =========================================================
 
 // ================================ BEGIN FUNCTION DEFINITIONS  =============================================================
@@ -48,8 +49,9 @@ function recreateBtns() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// this function retrieves data using the GIPHY api
-function getData(movieName) {
+// this function retrieves .gif images using the GIPHY api
+// this function also retrieves additional movie data using the OMBb api
+function getData() {
     
     // clear out placeholder images first 
     $('#GIF-display-area').empty();
@@ -61,10 +63,15 @@ function getData(movieName) {
     //  $('.movieBtn').on('click', function(event) {
     //      event.preventDefault();
     // 
-    //     var movieName = $(this).attr('data-name');
+    if (userMovieName !== '') {
+        var movieName = userMovieName;
+    } else {
+        
+        var movieName = $(this).attr('data-name');
+    }
     
     // be sure to retrieve something Disney related
-    //    movieName = movieName + '+Disney';
+    movieName = movieName + '+Disney';
     
     // clear out all images first
     $('#GIF-display-area').empty();
@@ -190,14 +197,14 @@ function getData(movieName) {
         // catch errors after OMBDb api ajax call
         .fail(function (error) {
             console.log('ERROR', error);
-        }); // end .catch  
+        }); // end .catch/.fail  
         
     })  // end .then function for GIPHY api ajax call
     
     // catch errors after GIPHY api ajax call
     .fail(function (error) {
         console.log('ERROR', error);
-    }); // end .catch      
+    }); // end .catch/.fail      
     
     // END OMDb api section to get extra movie data
     // })  //end on-click   
@@ -205,19 +212,20 @@ function getData(movieName) {
 } // end getData function
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function getUserMovie(userMovieName) {
+// this function is invoked on click of submit button when user wants to create a new movie button
+function getUserMovie() {
     
     //    $('#submit-btn').on('click', function(event) {
     //        event.preventDefault();
     
-    //        userMovieName = $('#movie-input').val().trim();
-    //        console.log(userMovieName);
+    userMovieName = $('#movie-input').val().trim();
+    console.log("getUserMovie: " + userMovieName);
     
     // no duplicate values yet
     var dupMovie = false;
     $('#status-msg').text('');
-    // check movie name for duplicates before adding to array
+    
+    // check movie name for duplicates before adding to array 
     for (var i = 0; i < topicsArr.length; i++) {
         //found a duplicate
         if (topicsArr[i].toLowerCase() === userMovieName.toLowerCase()) {
@@ -230,10 +238,11 @@ function getUserMovie(userMovieName) {
             // clear out all images first
             $('#GIF-display-area').empty();
             $('.movie-data').empty();
-            
-        } 
+        }
     } // end for loop
-    // no dups found so add movieName to topicsArr
+    
+    
+    // no duplicate entries found so add movieName to topicsArr
     if (dupMovie === false) {
         // add user movie name to array
         topicsArr.push(userMovieName);
@@ -242,7 +251,7 @@ function getUserMovie(userMovieName) {
         // reset user input field to blanks
         $('input[name=user-movie-name').val('');
         // get movie data
-        getData(userMovieName);
+        getData();
     }
     
     //   }); // end submit-btn
@@ -290,7 +299,7 @@ function getExtra() {
         $('#movie-awards').text(results2.Awards);    
     })  //  end .then function
     
-    // catch errors on AJAX call using the OMDb api 
+    // catch errors on AJAX call to the OMDb api 
     .fail(function (error) {
         console.log('ERROR', error);
     })
@@ -306,25 +315,12 @@ $(document).ready(function() {
     
     recreateBtns();
     
+    // register event handler on click for movie button?????? THIS STOPS WORKING as soon as getUserMovie RUNS ONCE
+    $('.movieBtn').on('click', getData);
     // register on click for movie button
-    $('.movieBtn').on('click', function(event) {
-        event.preventDefault();
-        // 
-        var movieName = $(this).attr('data-name');
-        
-        // be sure to retrieve something Disney related
-        movieName = movieName + '+Disney';
-        getData(movieName);
-    });
-    
-    $('#submit-btn').on('click', function(event) {
-       // event.preventDefault();
-        
-        userMovieName = $('#movie-input').val().trim();
-        console.log(userMovieName);
-       getUserMovie(userMovieName);
-    });
-    
+     
+    $('#submit-btn').on('click', getUserMovie);   
+    // register on click for movie button
     
 }); // end document.ready function
 
@@ -332,7 +328,7 @@ $(document).ready(function() {
 // ================================ END GAME ================================================================================
 // my pseudo code for the game
 // 1.  wait until doc is ready before running any JavaScript - document.ready() 
-// 2.  create an array to hold list of topics for each button
+// 2.  create an array to hold the starting list of topics (Disney Movie Titles) for each button
 // 3.  create HTML for locations of buttons, images, and  user input, test layout, to be sure it behaves at intended
 // 4.  upon execution of the index.html page, render the buttons with movie titles from the original array
 // 5.  register on.click event to get data using the GIPHY API (10 static gifs for any .movieBtn clicked)
@@ -345,3 +341,4 @@ $(document).ready(function() {
 // 8.  allow user input of movie title
 // 9.  create new button for the user's movie title
 // 10. add functionality to that new button to retrieve movie gifs
+// 11. add additional movie information with integration of the OMDb api (year released, plot, awards)
