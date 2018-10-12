@@ -13,7 +13,7 @@ Deployed Link: [API-fun](https://vwhope.github.io/API-fun/)
 **Solution**
 
 Using the AJAX GET request with two different, but related APIs (OMDb and GIPHY),
-it is possible to retrieve the Disney movie image from GIPHY and the additional data about that movie from OMDb. The movie name is used as the common link between the two.
+it is possible to retrieve the Disney movie image from GIPHY and the additional data about that movie from OMDb. The movie name is the common link between the two APIs and the API responses are both in JSON format.
 
 By pushing the user's movie title to the existing movie array the user's movie button is created and movie images and data retrieved.
 
