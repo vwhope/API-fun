@@ -1,25 +1,36 @@
 # API-fun
+
+Deployed Link: [API-fun](https://vwhope.github.io/API-fun/)
+
 ### Fun example of using APIs, AJAX and JSON
 
-#### Using GIPHY api to find Disney movie gifs
-#### Using OMDb api to add additional movie information
+**Problems to Solve**
+* Access and display Disney movie images from an external resource
+* Provide additional data related to each Disney movie image
+* Allow user to input their own movie title and display movie images
+* Allow user to click displayed images to toggle between static and animated images
 
-**Skills demonstrated in project:**
+**Solution**
+
+Using the AJAX GET request with two different, but related APIs (OMDb and GIPHY),
+it is possible to retrieve the Disney movie image from GIPHY and the additional data about that movie from OMDb. The movie name is used as the common link between the two.
+
+By pushing the user's movie title to the existing movie array the user's movie button is created and movie images and data retrieved.
+
+When retrieving the images from the API, both static and animated URLs of the image are stored. Using a combination of on-click events and data- attributes for the image, it is possible to toggle between the static and animated versions.
+
+
+**Technical skills demonstrated in project:**
 * use of two APIs to retrieve data from specific URLs 
     * GIPHY api - to retrieve gif images (static and animated)
     * OMDb api - to retrieve additional movie information
 * application of JavaScript language
 * application of CSS and reset files
 * manipulation of the HTML page using the jQuery library
-* responsive web design
-* dynamically creating new buttons based on user input
+* responsive web design using media queries
+* dynamically creating new buttons based on user input by pushing movie to array
 * toggling between static and animated images using URL data from the GIPHY api
-    
-**Goals of program:**
-* to create buttons based on data in an array
-* to create buttons based on user input
-* to retrieve data using AJAX and the GIPHY and OMDb APIs
-* switch between static and animated versions of the gif based on user click
+
 
 **To play game:**
 * open the index.html file in the browser
